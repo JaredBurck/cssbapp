@@ -1,0 +1,2314 @@
+{
+	"info": {
+		"_postman_id": "87237396-0fd4-4ff9-90e7-027008c6e5aa",
+		"name": "Spring Framework Exercise Base Tests",
+		"description": "## Spring Framework Exercise Base Tests\nThese are the base scripts used to test Spring Framework Exercises",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Retrieve an Empty List of Customers",
+			"item": [
+				{
+					"name": "Retrieve empty list of customers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2d646b08-8e01-4478-b63e-2f190fc8b5a8",
+								"exec": [
+									"pm.test(\"Status is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Returned list is empty []\", function () {",
+									"    pm.response.to.have.body(\"[]\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						},
+						"description": "HttpGet expecting an empty list of customers"
+					},
+					"response": []
+				}
+			],
+			"description": "Before we load any data, make sure the basic retrieval works",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Add a Customer",
+			"item": [
+				{
+					"name": "Add a customer (happy path)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"var jsonData = pm.response.json()",
+									"",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});",
+									"",
+									"pm.test(\"First name is 'Happy'\", function () {",
+									"//    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.firstName).to.eql(\"Happy\");",
+									"});",
+									"",
+									"pm.test(\"Last name is 'Tester'\", function () {",
+									"//    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.lastName).to.eql(\"Tester\");",
+									"});",
+									"",
+									"pm.test(\"Date of birth is 1951/01/21\", function () {",
+									"//    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.dateOfBirth).to.eql(\"1951/01/21\");",
+									"});",
+									"",
+									"pm.test(\"Id was generated\", function () {",
+									"//    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.id).to.be.a('number');",
+									"    postman.setEnvironmentVariable(\"happy_tester_id\", jsonData.id);",
+									"});",
+									"",
+									"pm.test(\"CreatedDate was generated\", function () {",
+									"    pm.expect(jsonData.createdDate).to.be.a('string')",
+									"});",
+									"",
+									"pm.test(\"LastModifiedDate was generated\", function () {",
+									"    pm.expect(jsonData.lastModifiedDate).to.be.a('string')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Happy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"1951/01/21\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Missing first name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"1951/01/21\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Missing last name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"1951/01/21\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Missing date of birth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format YYYYMMDD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"19510121\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format DDMMYYYY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"21011951\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format MMDDYYYY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"01211951\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format YYYY-MM-DD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"1951-01-21\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format DD-MM-YYYY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"21-01-1951\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format MM-DD-YYYY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"21-01-1951\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format DD/MM/YYYY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"21/01/1951\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format MM/DD/YYYY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"01/21/1951\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format DD/MM/YY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"21/01/51\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format MM/DD/YY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"01/21/51\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format YY/MM/DD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "85f472f3-93a8-40b4-bd03-bd8673cd60c1",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"51/01/21\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date day out of month",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"1951/01/32\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date month of year",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Unhappy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"1951/13/01\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Duplicate customer errors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fbc39c8e-8f2c-41d8-a571-5be4e1cd4bb0",
+								"exec": [
+									"pm.test(\"Request failed\", function () {",
+									"    pm.response.to.have.status(409);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Happy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"1951/01/21\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						},
+						"description": "customer with duplicate firstName, lastName, dateOfBirth should fail"
+					},
+					"response": []
+				}
+			],
+			"description": "1. Add a customer (happy path)\n2. Missing fields\n    1. firstName\n    2. secondName\n    3. birthDate\n3. Invalid date format\n    1. YYYYMMDD\n    2. DDMMYYYY\n    3. MMDDYYYY\n    4. YYYY-MM-DD\n    5. DD-MM-YYYY\n    6. MM-DD-YYYY\n    7. DD/MM/YYYY\n    8. MM/DD/YYYY\n    9. DD/MM/YY\n    10. MM/DD/YY\n    11. 2000/04/31\n4. Duplicate customer",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "90a18845-af8c-4bf3-8660-25236e65a9d1",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "c1e20d1b-5d59-4b36-86b2-9307b5eceee8",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Retrieve a Customer By Id",
+			"item": [
+				{
+					"name": "Happy Path",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b7abbe7a-d6d7-44a8-afa6-b1cf5c2699fc",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Happy Path - customer data is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.firstName).to.eql(\"Happy\");\r",
+									"    pm.expect(jsonData.lastName).to.eql(\"Tester\");\r",
+									"    pm.expect(jsonData.dateOfBirth).to.eql(\"1951/01/21\")\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b8f869a3-eae6-4309-b192-9f34175a5369",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{happy_tester_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{happy_tester_id}}"
+							]
+						},
+						"description": "Expects customer Happy Path to exist with birthdate of 01/01/1951."
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Id value is non numeric",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c4cf7b29-6e5b-4bcc-a7ed-77889f53b7ed",
+								"exec": [
+									"pm.test(\"Request failed with 400 error\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"a"
+							]
+						},
+						"description": "Id is expected to be a long (numeric) value"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Id value contains a decimal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "14dc551f-8bcc-408b-90e1-b29ba608b741",
+								"exec": [
+									"pm.test(\"Request failed with 400 error\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/1.2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"1.2"
+							]
+						},
+						"description": "Id is expected to be a long (numeric) value"
+					},
+					"response": []
+				},
+				{
+					"name": "Customer not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c06849a0-167b-4853-9883-4ebd4f9b3582",
+								"exec": [
+									"pm.test(\"Request failed with 404 error\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/99999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"99999"
+							]
+						},
+						"description": "Id is expected to be a long (numeric) value"
+					},
+					"response": []
+				}
+			],
+			"description": "Set of tests based on retrieving a customer by Id",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Update a Customer - HTTPPUT",
+			"item": [
+				{
+					"name": "Setup - Add a customer for update",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "11819425-65b0-4617-a770-39ab8323088a",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);",
+									"    postman.setEnvironmentVariable(\"update_customer_id\", jsonData.id);",
+									"    postman.setEnvironmentVariable(\"update_customer\", JSON.stringify(jsonData));",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"1961/02/14\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						},
+						"description": "Adds a specific customer used for testing these update scripts."
+					},
+					"response": []
+				},
+				{
+					"name": "Update with no changes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "86b37586-62d1-436a-8802-a49424ce8155",
+								"exec": [
+									"const moment = require('moment');\r",
+									"var jsonData = pm.response.json()\r",
+									"\r",
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);\r",
+									"});\r",
+									"\r",
+									"var updateCustomer = JSON.parse(postman.getEnvironmentVariable(\"update_customer\"));\r",
+									"console.log(\"updateCustomer.firstName = \" + updateCustomer.firstName);\r",
+									"\r",
+									"pm.test(\"Update Customer first name matches\", function () {\r",
+									"    pm.expect(jsonData.firstName).to.eql(updateCustomer.firstName);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Update Customer last name matches\", function () {\r",
+									"    pm.expect(jsonData.lastName).to.eql(updateCustomer.lastName);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Update Customer date of birth matches\", function () {\r",
+									"    pm.expect(jsonData.dateOfBirth).to.eql(updateCustomer.dateOfBirth);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Update Customer id matches\", function () {\r",
+									"    pm.expect(jsonData.id).to.eql(updateCustomer.id);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Update Customer createDate matches\", function () {\r",
+									"    var updateCustomerCreatedDate = moment(updateCustomer.createdDate).format(\"YYYY-MM-DDTHH:mm:ss.SSSSS\");\r",
+									"    var responseCreatedDate = moment(jsonData.createdDate).format(\"YYYY-MM-DDTHH:mm:ss.SSSSS\");\r",
+									"    pm.expect(responseCreatedDate).to.eql(updateCustomerCreatedDate);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Update Customer lastModifiedDate does not match\", function () {\r",
+									"    pm.expect(jsonData.lastModifiedDate).to.not.eql(updateCustomer.lastModifiedDate);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"1961/02/14\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Missing first name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ea4f0fc0-d7eb-4d40-80d1-8c832128b2f4",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"1961/02/14\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Missing last name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "90a0464c-ecdf-42fb-9016-8355b9a37aa2",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"dateOfBirth\": \"1961/02/14\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Missing date of birth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d30ac006-22fa-44a1-9ef0-36e64379220a",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format YYYYMMDD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ef3cae2a-7c68-4107-a378-4344d848c22f",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"19610214\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format DDMMYYYY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e17e2f3e-cd8d-4411-94b9-62d63a2f5dc4",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"14021961\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format MMDDYYYY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6a753715-8977-4819-aef1-3dcdf68f1326",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"02141961\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format YYYY-MM-DD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "37625c10-304c-4be3-b694-555157febecf",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"1961-02-14\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format DD-MM-YYYY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "153b7cd7-b170-4bf1-84d7-347288cf71ca",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"14-02-1961\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format MM-DD-YYYY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9e6b6f32-bc65-4864-9574-c340123b7002",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"02-14-1961\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format DD/MM/YYYY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "083d759d-4b7c-4b8c-b92e-58b44ecd4d2d",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"14/02/1961\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format MM/DD/YYYY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a0f74e90-2c53-4c97-b287-739e0fd927f2",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"02/14/1961\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format DD/MM/YY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "279df2e5-61b1-4317-bba4-66b82c27ebfd",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"14/02/61\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format YY/MM/DD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c2429a7f-af93-458b-9e20-5afa31569985",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"61/02/14\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date format MM/DD/YY",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a08ac6c8-f3db-4d62-97a9-9b37c1c62d8e",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"02/14/61\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date day out of month",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "487f0da7-e587-4e5b-8b92-ea52a0f7e305",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"1961/02/34\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid Date month of year",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b4701324-bbf9-41b8-bb92-8ea46813cfc7",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Updated\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"1961/13/14\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Duplicate customer errors",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fc9ba35b-dda2-45ad-be45-0ecc347dcefd",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([409]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Happy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"1951/01/21\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{update_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{update_customer_id}}"
+							]
+						},
+						"description": "Should return the original customer with no changes"
+					},
+					"response": []
+				},
+				{
+					"name": "Customer not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e5695985-4b34-4afd-8472-bfb1ef784267",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": {{update_customer_id}},\n    \"firstName\": \"Happy\",\n    \"lastName\": \"Tester\",\n    \"dateOfBirth\": \"1951/01/21\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/999999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"999999"
+							]
+						},
+						"description": "Uses the Happy Tester customer from adding a customer.  If this test fails with a 404, it should fail with a duplicate customer error."
+					},
+					"response": []
+				}
+			],
+			"description": "Set of tests based on HttpPUT requests",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Remove a Customer - HTTPDELETE",
+			"item": [
+				{
+					"name": "Setup - Add a customer for removal",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "61f4f3d2-8393-4665-9552-b856023b21b9",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201]);",
+									"    postman.setEnvironmentVariable(\"remove_customer_id\", jsonData.id);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"firstName\": \"Deleted\",\n    \"lastName\": \"Customer\",\n    \"dateOfBirth\": \"1962/03/31\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers"
+							]
+						},
+						"description": "Adds a specific customer used for testing these update scripts."
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid customer id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "95af29bc-ffb1-48a3-a1cc-14cb8adcb603",
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/ABC123",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"ABC123"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customer not found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "10fa9470-4fdb-49b8-bcb8-35d05be856fe",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/999999",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"999999"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customer removed sucessfully",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a052b07f-eef1-4621-b1d9-eef4a8fe0b68",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{remove_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{remove_customer_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify customer removed",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "05e6475c-c9ea-4130-a671-59efa5b0885d",
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/sfw/exercise{{exerciseNumber}}/customers/{{remove_customer_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"sfw",
+								"exercise{{exerciseNumber}}",
+								"customers",
+								"{{remove_customer_id}}"
+							]
+						},
+						"description": "This test should always be run after the Customer removed successfully test to verify the data was removed."
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "698d712e-c6f8-49c6-9393-331a9ffa325a",
+				"type": "text/javascript",
+				"exec": [
+					"const moment = require('moment');"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "4720ad3c-2b7c-4fe8-abd5-cff5e92a150c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "feff4c20-2cd6-4127-8cb8-ed219eed17fc",
+			"key": "url",
+			"value": ""
+		},
+		{
+			"id": "ddfcb7d4-8a37-4bde-9524-0417ab9af2a7",
+			"key": "happy_tester_id",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}
