@@ -1,0 +1,14 @@
+com/compsourcemutual/train/sfw/exercise1/Exercise1Application.java
+ com.compsourcemutual.train.sfw.exercise1.Exercise1Application
+com/compsourcemutual/train/sfw/exercise1/domain/Customer.java
+ com.compsourcemutual.train.sfw.exercise1.domain.Customer
+com/compsourcemutual/train/sfw/exercise1/controllers/CustomerController.java
+ com.compsourcemutual.train.sfw.exercise1.controllers.CustomerController
+com/compsourcemutual/train/sfw/exercise1/configuration/AuditConfig.java
+ com.compsourcemutual.train.sfw.exercise1.configuration.AuditConfig
+com/compsourcemutual/train/sfw/exercise1/aspects/LoggingAspect.java
+ com.compsourcemutual.train.sfw.exercise1.aspects.LoggingAspect
+com/compsourcemutual/train/sfw/exercise1/repositories/CustomerRepository.java
+ com.compsourcemutual.train.sfw.exercise1.repositories.CustomerRepository
+com/compsourcemutual/train/sfw/exercise1/configuration/AspectConfig.java
+ com.compsourcemutual.train.sfw.exercise1.configuration.AspectConfig
