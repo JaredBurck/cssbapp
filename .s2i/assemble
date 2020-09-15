@@ -1,4 +1,7 @@
 #!/bin/sh
+
+set -x
+
 # Global S2I variable setup
 source `dirname "$0"`/s2i-setup
 
@@ -219,6 +222,8 @@ function build_gradle() {
 
   # =========
   # Run Gradle
+  echo "gradle_args=${gradle_args}"
+  echo "gradle_args_append=${GRADLE_ARGS_APPEND}"
   echo "Running './gradlew --no-daemon ${gradle_args} ${GRADLE_ARGS_APPEND}'"
   ./gradlew --no-daemon ${gradle_args} ${GRADLE_ARGS_APPEND}
   check_error "Gradle build" $?
